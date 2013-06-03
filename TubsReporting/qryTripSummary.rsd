@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>dsTUBS</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@tripId">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>SELECT        T.tripno AS trip_number, P.description AS observer_prog, COALESCE (T.tripno_ck collate DATABASE_DEFAULT + '(CK)', T.tripno_fm collate DATABASE_DEFAULT + '(FM)', T.tripno_ffa collate DATABASE_DEFAULT + '(FFA)', T.tripno_sb collate DATABASE_DEFAULT + '(SB)', 
+                         T.tripno_hw collate DATABASE_DEFAULT + '(HW)', 'N/A') AS alt_trip_number, CONVERT(VARCHAR(10), T.dep_date, 104) AS first_day, CONVERT(VARCHAR(10), T.ret_date, 104) AS last_day, 
+                         RTRIM(LTRIM(V.vessel_name)) AS vessel_name, RTRIM(LTRIM(S.first_name)) + ' ' + RTRIM(LTRIM(S.family_name)) + ' - ' + RTRIM(LTRIM(S.staff_code)) AS name, 
+                         DP.port_name AS departure_port, RP.port_name AS return_port
+FROM            obsv.trip AS T INNER JOIN
+                         ref.vessels AS V ON T.vessel_id = V.vessel_id INNER JOIN
+                         ref.field_staff AS S ON S.staff_code = T.staff_code collate DATABASE_DEFAULT INNER JOIN
+                         ref.ports AS DP ON DP.location_code = T.dep_port collate DATABASE_DEFAULT INNER JOIN
+                         ref.ports AS RP ON RP.location_code = T.ret_port collate DATABASE_DEFAULT INNER JOIN
+                         obsv.ref_programs AS P ON T.obsprg_code = P.obsprg_code
+WHERE        (T.obstrip_id = @tripId)</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="trip_number">
+        <DataField>trip_number</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="observer_prog">
+        <DataField>observer_prog</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="alt_trip_number">
+        <DataField>alt_trip_number</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="first_day">
+        <DataField>first_day</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="last_day">
+        <DataField>last_day</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="vessel_name">
+        <DataField>vessel_name</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="name">
+        <DataField>name</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="departure_port">
+        <DataField>departure_port</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="return_port">
+        <DataField>return_port</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

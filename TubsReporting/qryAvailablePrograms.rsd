@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <Description />
+  <DataSet Name="qryAvailablePrograms">
+    <Query>
+      <DataSourceReference>dsTUBS</DataSourceReference>
+      <CommandText>select [obsprg_code], [description] + ' (' + [obsprg_code] + ')' as [description] from [obsv].[ref_programs]</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="obsprg_code">
+        <DataField>obsprg_code</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="description">
+        <DataField>description</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

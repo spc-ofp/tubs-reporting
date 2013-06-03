@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>dsTUBS</DataSourceReference>
+      <CommandText>-- Samples by user for the current month
+select sample_count, entered_by, HASHBYTES('MD5', entered_by) &amp; 11111 as anon_entered_by
+from (
+	select
+		sum(sample_count) as sample_count,
+		replace(upper(entered_by), 'NOUMEA\', '') as entered_by
+	from
+		[TUBS_MASTER_ENTRY].[obsv].[vw_sample_count_s]
+	where
+		entered_by not like '%TRIPPROC%'
+		and datepart(month, entered_dtime) = DATEPART(MONTH, GETDATE())
+		and DATEPART(year, entered_dtime) = DATEPART(YEAR, GETDATE())
+	group by replace(upper(entered_by), 'NOUMEA\', '')
+) as z</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="sample_count">
+        <DataField>sample_count</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="entered_by">
+        <DataField>entered_by</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="anon_entered_by">
+        <DataField>anon_entered_by</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>dsTUBS</DataSourceReference>
+      <CommandText>-- Trip counts and sea days by observer program, observer, and year
+SELECT
+    COUNT(1) AS trip_count
+    ,SUM(DATEDIFF(DAY, dep_date, ret_date) + 1) as sea_days
+    ,obsprg_code
+    ,G.gear_desc AS gear_type
+    ,staff_code, DATEPART(year,dep_date) as trip_year
+FROM
+    [obsv].[trip] T INNER JOIN [ref].[gears] G ON T.gear_code = G.shortgear_code
+GROUP BY 
+	obsprg_code
+	,staff_code
+	,DATEPART(year,dep_date)
+	,gear_desc</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="trip_count">
+        <DataField>trip_count</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="obsprg_code">
+        <DataField>obsprg_code</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="sea_days">
+        <DataField>sea_days</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="staff_code">
+        <DataField>staff_code</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="gear_type">
+        <DataField>gear_type</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="trip_year">
+        <DataField>trip_year</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
